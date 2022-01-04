@@ -1,0 +1,129 @@
+//在此定义文法产生式，使用“//”表示注释。
+//总程序
+1 Program ::= ProgramHead DeclarePart ProgramBody <DOT>
+//程序头
+2 ProgramHead ::= <PROGRAM> ProgramName
+3 ProgramName ::= <IDENTIFIER>
+//程序声明
+4 DeclarePart ::= TypeDec VarDec ProcDec
+//类型声明
+5 TypeDec ::= <EPSILON>
+6 TypeDec ::= TypeDeclaration
+7 TypeDeclaration ::= <TYPE> TypeDecList
+8 TypeDecList ::= TypeId <EQU> TypeDef <SEMICOLON> TypeDecMore
+9 TypeDecMore ::= <EPSILON>
+10 TypeDecMore ::= TypeDecList
+11 TypeId ::= <IDENTIFIER>
+//类型
+12 TypeDef ::= BaseType
+13 TypeDef ::= StructureType
+14 TypeDef ::= <IDENTIFIER>
+15 BaseType ::= <INTEGER>
+16 BaseType ::= <CHARACTER>
+17 StructureType ::= ArrayType
+18 StructureType ::= RecType
+19 ArrayType ::= <ARRAY> <LSQUAREBRACKET> <UINTEGER> <UNDERANGE> <UINTEGER> <RSQUAREBRACKET> <OF> BaseType
+//20 Low ::= INTC
+//21 Top ::= INTC
+22 RecType ::= <RECORD> FieldDecList <END>
+23 FieldDecList ::= BaseType IdList <SEMICOLON> FieldDecMore
+24 FieldDecList ::= ArrayType IdList <SEMICOLON> FieldDecMore
+25 FieldDecMore ::= <EPSILON>
+26 FieldDecMore ::= FieldDecList
+27 IdList ::= <IDENTIFIER> IdMore
+28 IdMore ::= <EPSILON>
+29 IdMore ::= <COMMA> IdList
+//变量声明
+30 VarDec ::= <EPSILON>
+31 VarDec ::= VarDeclaration
+32 VarDeclaration ::= <VAR> VarDecList
+33 VarDecList ::= TypeDef VarIdList <SEMICOLON> VarDecMore
+34 VarDecMore ::= <EPSILON>
+35 VarDecMore ::= VarDecList
+36 VarIdList ::= <IDENTIFIER> VarIdMore
+37 VarIdMore ::= <EPSILON>
+38 VarIdMore ::= <COMMA> VarIdList
+//过程声明
+39 ProcDec ::= <EPSILON>
+40 ProcDec ::= ProcDeclaration
+41 ProcDeclaration ::= <PROCEDURE> <IDENTIFIER> <LPARENTHESIS> ParamList <RPARENTHESIS> <SEMICOLON> ProcDecPart ProcBody ProcDecMore
+42 ProcDecMore ::= <EPSILON>
+43 ProcDecMore ::= ProcDeclaration
+//44 ProcName ::= <IDENTIFIER>
+//参数声明
+45 ParamList ::= <EPSILON>
+46 ParamList ::= ParamDecList
+47 ParamDecList ::= Param ParamMore
+48 ParamMore ::= <EPSILON>
+49 ParamMore ::= <SEMICOLON> ParamDecList
+50 Param ::= TypeDef FormList
+51 Param ::= <VAR> TypeDef FormList
+52 FormList ::= <IDENTIFIER> FidMore
+53 FidMore ::= <EPSILON>
+54 FidMore ::= <COMMA> FormList
+//过程中的声明部分
+55 ProcDecPart ::= DeclarePart
+//过程体
+56 ProcBody ::= ProgramBody
+//主程序体
+57 ProgramBody ::= <BEGIN> StmList <END>
+//语句序列
+58 StmList ::= Stm StmMore
+59 StmMore ::= <EPSILON>
+60 StmMore ::= <SEMICOLON> StmList
+//语句
+61 Stm ::= ConditionalStm
+62 Stm ::= LoopStm
+63 Stm ::= InputStm
+64 Stm ::= OutputStm
+65 Stm ::= ReturnStm
+66 Stm ::= <IDENTIFIER> AssCall
+67 AssCall ::= AssignmentRest
+68 AssCall ::= CallStmRest
+//赋值语句
+69 AssignmentRest ::= VariMore <ASSIGN> Exp
+//条件语句
+70 ConditionalStm ::= <IF> RelExp <THEN> StmList <ELSE> StmList <FI>
+//循环语句
+71 LoopStm ::= <WHILE> RelExp <DO> StmList <ENDWHILE>
+//输入语句
+72 InputStm ::= <READ> <LPARENTHESIS> <IDENTIFIER> <RPARENTHESIS>
+//73 Invar ::= <IDENTIFIER>
+//输出语句
+74 OutputStm ::= <WRITE> <LPARENTHESIS> Exp <RPARENTHESIS>
+//返回语句
+75 ReturnStm ::= <RETURN>
+//过程调用语句
+76 CallStmRest ::= <LPARENTHESIS> ActParamList <RPARENTHESIS>
+77 ActParamList ::= <EPSILON>
+78 ActParamList ::= Exp ActParamMore
+79 ActParamMore ::= <EPSILON>
+80 ActParamMore ::= <COMMA> ActParamList
+//条件表达式
+81 RelExp ::= Exp OtherRelE
+82 OtherRelE ::= CmpOp Exp
+//算术表达式
+83 Exp ::= Term OtherTerm
+84 OtherTerm ::= <EPSILON>
+85 OtherTerm ::= AddOp Exp
+//项
+86 Term ::= Factor OtherFactor
+87 OtherFactor ::= <EPSILON>
+88 OtherFactor ::= MultOp Term
+//因子
+89 Factor ::= <LPARENTHESIS> Exp <RPARENTHESIS>
+90 Factor ::= <UINTEGER>
+91 Factor ::= Variable
+92 Variable ::= <IDENTIFIER> VariMore
+93 VariMore ::= <EPSILON>
+94 VariMore ::= <LSQUAREBRACKET> Exp <RSQUAREBRACKET>
+95 VariMore ::= <DOT> FieldVar
+96 FieldVar ::= <IDENTIFIER> FieldVarMore
+97 FieldVarMore ::= <EPSILON>
+98 FieldVarMore ::= <LSQUAREBRACKET> Exp <RSQUAREBRACKET>
+99 CmpOp ::= <LT>
+100 CmpOp ::= <EQU>
+101 AddOp ::= <PLUS>
+102 AddOp ::= <MINUS>
+103 MultOp ::= <MULTIPLY>
+104 MultOp ::= <DIVIDE>
